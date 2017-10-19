@@ -11,7 +11,7 @@
     "url": "git+https://github.com/wshs0713/node-nudb.git"
   },
   "author": "Szu-Hsuan, Wu",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/wshs0713/node-nudb/issues"
   },
