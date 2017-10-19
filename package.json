@@ -1,0 +1,23 @@
+{
+  "name": "node-nudb",
+  "version": "1.0.0",
+  "description": "NuDB API for Node.js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wshs0713/node-nudb.git"
+  },
+  "author": "Szu-Hsuan, Wu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wshs0713/node-nudb/issues"
+  },
+  "homepage": "https://github.com/wshs0713/node-nudb#readme",
+  "dependencies": {
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
+  }
+}
