@@ -1,7 +1,7 @@
 {
   "name": "node-nudb",
-  "version": "1.0.2",
-  "description": "NuDB API for Node.js.",
+  "version": "1.0.3",
+  "description": "Node.js module for NuDB.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
