@@ -6,7 +6,7 @@ $ npm install node-nudb
 
 ## Usage
 ### 資料格式說明
-+ GAIS record: 以"@"開頭, ":"結尾, ex.: @title:
++ GAIS record: 以"@"開頭, ":"結尾, For example: @title:
 + JSON
 
 ### Connect to NuDB
