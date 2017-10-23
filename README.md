@@ -6,7 +6,14 @@ $ npm install node-nudb
 
 ## Usage
 ### 資料格式說明
-+ GAIS record: 以"@"開頭, ":"結尾, For example: @title:
++ GAIS record 
+	+ 以"@"開頭, ":"結尾作為欄位名稱
+	+ ":"之後為欄位內容
+	+ For example: 
+	```js
+	//"@title:" 為欄位名稱
+	@title:Mayday五月天 [ 頑固Tough ] Official Music Video
+	```
 + JSON
 
 ### Connect to NuDB
@@ -73,11 +80,17 @@ let result = await nudb.search(query);
 	+ ridrange: 設定搜尋的rid範圍, rid由大至小, 僅搜尋此範圍內的資料
 	+ minscore: score最小值
 	+ maxscore: score最大值
-	+ q: 搜尋關鍵字, 可指定欄位搜尋, 欄位格式為GAIS record
-		+ 指定欄位搜尋: 
+	+ q: 搜尋關鍵字
+		+ 可指定欄位搜尋, 欄位格式為GAIS record: 
 		```js
 		{
 			q: '@title:日本旅遊'
+		}
+		```
+		+ 可搜尋多個欄位, 以","區隔:
+		```js
+		{
+			q: "@title:日本旅遊,@body:東京"
 		}
 		```
 	+ filter: 數值條件檢索, 沒有做數值欄位索引(-numfieldindex)也可查詢
