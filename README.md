@@ -101,7 +101,7 @@ let result = await nudb.search(query);
 		```
 		```js
 		{
-			@price:200-400		//數值區間
+			filter: '@price:200-400'		//數值區間
 		}
 		```
 	+ maxcandidnum
@@ -121,7 +121,7 @@ let result = await nudb.search(query);
 		```
 		```js
 		{
-			L: 11,60	//從第11筆開始, 輸出60筆
+			L: '11,60'	//從第11筆開始, 輸出60筆
 		}
 		```
 	+ out: 輸出格式 (json or text)
@@ -145,7 +145,7 @@ let result = await nudb.rput(data, format, recBeg);
 let result = await nudb.fput(file, format, recBeg);
 ```
 + **參數說明**
-	+ file: 要上傳的資料
+	+ file: 要上傳的檔案
 	+ format: 資料格式(json or text)
 	+ recBeg: record begin pattern, 若資料格式為text則必須有此參數
 
