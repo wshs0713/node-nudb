@@ -1,6 +1,6 @@
 {
   "name": "node-nudb",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "NuDB API for Node.js.",
   "main": "index.js",
   "scripts": {
