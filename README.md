@@ -24,7 +24,6 @@ nudb.connect('host', 'port', 'db');
 ```
 
 ### Get DB info
-- 取得DB資訊
 ```js
 let result = await nudb.getDBInfo(db);
 ```
