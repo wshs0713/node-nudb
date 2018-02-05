@@ -158,6 +158,8 @@ let result = await nudb.fput(file, format, recBeg);
 ```js
 let result = await nudb.rdel(rid);
 ```
+- **參數說明**
+	- rid: 要刪除的資料rid, 可以一次刪除多筆 (使用 , 隔開多個rid)
 
 ### Update record
 ```js
