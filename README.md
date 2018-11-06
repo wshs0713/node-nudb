@@ -41,7 +41,8 @@ $ npm install node-nudb
 ### Connect to NUDB
 
 ```js
-let node_nudb = require('node-nudb');
+const node_nudb = require('node-nudb');
+
 let nudb = new node_nudb.Nudb();
 nudb.connect('host', 'port', 'db');
 ```
@@ -111,29 +112,52 @@ let result = await nudb.search(query);
   - minscore: score最小值
   - maxscore: score最大值
   - q: 搜尋關鍵字
-    - 可指定欄位搜尋, 欄位格式為GAIS record: 
-    ```js
-    {
-      q: '@title:日本旅遊'
-    }
-    ```
+    - 全文搜尋:  
+  
+      ```js
+      {
+        q: '賞櫻旅遊'
+      }
+      ```
+
+    - 可指定欄位搜尋, 欄位格式為GAIS record:
+
+      ```js
+      {
+        q: '@title:日本旅遊'
+      }
+      ```
+
+    - 可指定欄位值須完全符合:
+
+      ```js
+      {
+        q: '@id:=abcd1234'
+      }
+      ```
+
     - 可搜尋多個欄位, 以","區隔:
-    ```js
-    {
-      q: "@title:日本旅遊,@body:東京"
-    }
-    ```
-  - filter: 數值條件檢索, 沒有做數值欄位索引(-numfieldindex)也可查詢
-    ```js
-    {
-      filter: '@price:<200'
-    }
-    ```
-    ```js
-    {
-      filter: '@price:200-400'  //數值區間
-    }
-    ```
+
+      ```js
+      {
+        q: "@title:日本旅遊,@body:東京"
+      }
+      ```
+
+    - filter: 數值條件檢索, 沒有做數值欄位索引(-numfieldindex)也可查詢
+
+      ```js
+      {
+        filter: '@price:<200'
+      }
+      ```
+
+      ```js
+      {
+        filter: '@price:200-400'  //數值區間
+      }
+      ```
+
   - maxcandidnum
   - Sensitivity
     - sensitive: 預設, 區分大小寫
@@ -144,16 +168,19 @@ let result = await nudb.search(query);
   - ps: page size, 每個page大小, 預設為10
   - select: 指定輸出欄位, 欄位格式為GAIS record, 多個欄位之間以","區隔
   - L: 指定回傳起始比數及總筆數
+
     ```js
     {
       L: 30       // 回傳30筆
     }
     ```
+
     ```js
     {
       L: '11,60'  // 從第11筆開始, 輸出60筆
     }
     ```
+
   - out: 輸出格式 (json or text)
 
 ### Get record by rid
