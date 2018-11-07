@@ -1,8 +1,9 @@
 # NUDB
 
-A node module for NUDB. NUDB is a fast database and search engine.  
+A Node.js module for NUDB.  
+NUDB is a fast database and search engine.  
 
-Menu:
+Menu:  
 
 - [NUDB](#nudb)
   - [Install](#install)
