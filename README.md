@@ -28,8 +28,8 @@ $ npm install node-nudb
 ### 資料格式說明
 
 - GAIS record  
-  - 以"@"開頭, ":"結尾作為欄位名稱
-  - ":"之後為欄位內容
+  - 以 `@` 開頭, `:` 結尾作為欄位名稱
+  - `:` 之後為欄位內容
   - For example:  
 
     ```js
@@ -44,15 +44,26 @@ $ npm install node-nudb
 const node_nudb = require('node-nudb');
 
 let nudb = new node_nudb.Nudb();
-nudb.connect('host', 'port', 'db');
+nudb.connect(host, port, db);
 ```
 
+**參數說明**  
+  
+- host: DB host
+- port: DB port
+- db: 指定 DB 名稱
+  
 ### Get DB info
 
 ```js
-let result = await nudb.getDBInfo(db);
+let result = await nudb.getDBInfo(db, timeout);
 ```
 
+**參數說明**  
+  
+- db: 指定 DB 名稱
+- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
+  
 ### Search
 
 ```js
@@ -76,10 +87,13 @@ let query = {
   select: "@title:,@body:,@viewcount:",
   out: "json"
 }
-let result = await nudb.search(query);
+let result = await nudb.search(query, timeout);
 ```
 
-- **參數說明**
+**參數說明**  
+  
+- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
+- query: query 參數
   - db: 指定DB
   - matchmode
     - AndMatch (預設)
@@ -92,17 +106,21 @@ let result = await nudb.search(query);
     - score: 必須有參數q 才有score
     - groupsize: 搭配groupby
     - {FieldName}: 依照欄位(FieldName)排序, 在建立DB時須將要排序的欄位加至abstractindex
+
       ```js
       {
         orderby: '@viewcount:'
       }
       ```
-    - [min|max|ave|sum]{FieldName}: 找出欄位(FieldName)的最小/最大/平均/總和值  
+
+    - [min|max|ave|sum]{FieldName}: 找出欄位(FieldName)的最小/最大/平均/總和值
+
       ```js
       {
         orderby: 'sum@viewcount:'
       }
       ```
+
   - order: 搭配orderby使用, 預設為decreasing
     - decreasing: 遞減
     - increasing: 遞增
@@ -113,7 +131,7 @@ let result = await nudb.search(query);
   - maxscore: score最大值
   - q: 搜尋關鍵字
     - 全文搜尋:  
-  
+
       ```js
       {
         q: '賞櫻旅遊'
@@ -186,47 +204,60 @@ let result = await nudb.search(query);
 ### Get record by rid
 
 ```js
-let result = await nudb.rget(rid);
+let result = await nudb.rget(rid, timeout);
 ```
+
+**參數說明**  
+  
+- rid: Record ID.
+- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
 
 ### Put record
 
 ```js
-let result = await nudb.rput(data, format, recBeg);
+let result = await nudb.rput(data, format, recBeg, timeout);
 ```
 
-- **參數說明**
-  - data: 資料
-  - format: 資料格式(json or text)
-  - recBeg: record begin pattern, 若資料格式為text則必須有此參數
+**參數說明**  
+  
+- data: data object or string.
+- format: 資料格式(json or text)
+- recBeg: record begin pattern, 若資料格式為text則必須有此參數
+- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
 
 ### Put record from file
 
 ```js
-let result = await nudb.fput(file, format, recBeg);
+let result = await nudb.fput(file, format, recBeg, timeout);
 ```
 
-- **參數說明**
-  - file: 要上傳的檔案
-  - format: 資料格式(json or text)
-  - recBeg: record begin pattern, 若資料格式為text則必須有此參數
+**參數說明**  
+  
+- file: 要上傳的檔案
+- format: 資料格式(json or text)
+- recBeg: record begin pattern, 若資料格式為text則必須有此參數
+- timeout: 設定 timeout，單位為 ms，預設是 120000 ms.
 
 ### Delete record by rid
 
 ```js
-let result = await nudb.rdel(rid);
+let result = await nudb.rdel(rid, timeout);
 ```
 
-- **參數說明**
-  - rid: 要刪除的資料rid, 可以一次刪除多筆 (使用 **,** 隔開多個rid)
+**參數說明**  
+  
+- rid: 要刪除的資料rid, 可以一次刪除多筆 (使用 `,` 隔開多個rid)
+- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
 
 ### Update record
 
 ```js
-let result = await nudb.rupdate(rid, data, format);
+let result = await nudb.rupdate(rid, data, format, timeout);
 ```
 
-- **參數說明**
-  - rid: 要更新的資料rid
-  - data: 更新的資料內容
-  - format: 資料格式(json or text)
+**參數說明**  
+  
+- rid: 要更新的資料rid
+- data: 更新的資料內容
+- format: 資料格式(json or text)
+- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
