@@ -81,6 +81,7 @@ let query = {
   minscore: 100,
   maxscore: 5000,
   q: "旅遊",
+  time: "=20190101-20190310",
   filter: "@viewcount:>1000",
   Sensitivity: "sensitive",
   p: 1,
@@ -106,7 +107,9 @@ let result = await nudb.search(query, timeout);
     - rid: 依照rid排序
     - score: 必須有參數q 才有score
     - groupsize: 搭配groupby
-    - {FieldName}: 依照欄位(FieldName)排序, 在建立DB時須將要排序的欄位加至abstractindex
+    - {FieldName}: 依照欄位(FieldName)排序
+      - 在建立DB時, 數值欄位須設定 `-numfieldindex`
+      - 在建立DB時, 時間欄位須設定 `-timeindex`
 
       ```js
       {
@@ -155,6 +158,14 @@ let result = await nudb.search(query, timeout);
       }
       ```
 
+    - 可設定所有條件須符合(AndMatch):
+
+      ```js
+      {
+        q: '+@id:1234,+@name:test'
+      }
+      ```
+
     - 可搜尋多個欄位, 以","區隔:
 
       ```js
@@ -163,7 +174,41 @@ let result = await nudb.search(query, timeout);
       }
       ```
 
-    - filter: 數值條件檢索, 沒有做數值欄位索引(-numfieldindex)也可查詢
+  - time: 可設定搜尋時間範圍
+    - 在建立DB時, 時間欄位須設定 `-timeindex`
+    - 限定時間區間
+
+      ```js
+      {
+        time: '=20180101-20180301'
+      }
+      ```
+
+    - 特定時間以後
+  
+      ```js
+      {
+        time: '=>20180220122000'  // YYYYMMDDHHmmss
+      }
+      ```
+
+    - 特定時間以前
+
+      ```js
+      {
+        time: '=<20180220122000'  // YYYYMMDDHHmmss
+      }
+      ```
+
+    - 限定某天
+
+      ```js
+      {
+        time: '=20180220'
+      }
+      ```
+
+  - filter: 數值條件檢索, 沒有做數值欄位索引(-numfieldindex)也可查詢
 
       ```js
       {
