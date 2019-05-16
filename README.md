@@ -298,7 +298,7 @@ let result = await nudb.rdel(rid, timeout);
 ### Update record
 
 ```js
-let result = await nudb.rupdate(rid, data, format, timeout);
+let result = await nudb.rupdate(rid, data, format, mode, timeout);
 ```
 
 **參數說明**  
@@ -306,4 +306,7 @@ let result = await nudb.rupdate(rid, data, format, timeout);
 - rid: 要更新的資料rid
 - data: 更新的資料內容
 - format: 資料格式(json or text)
+- mode: 更新模式
+  - replaceRecord: 更新整筆資料 (Default)
+  - replaceField: 更新指定欄位的資料
 - timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
