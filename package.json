@@ -1,6 +1,6 @@
 {
   "name": "node-nudb",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "A Node.js module for NUDB.",
   "keywords": [
     "nudb"
