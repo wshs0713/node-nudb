@@ -12,10 +12,10 @@ Menu:
     - [Connect to NUDB](#connect-to-nudb)
     - [Get DB info](#get-db-info)
     - [Search](#search)
-    - [Get record by rid](#get-record-by-rid)
+    - [Get record by rid or key](#get-record-by-rid-or-key)
     - [Put record](#put-record)
     - [Put record from file](#put-record-from-file)
-    - [Delete record by rid](#delete-record-by-rid)
+    - [Delete record by rid or key](#delete-record-by-rid-or-key)
     - [Update record](#update-record)
 
 ## Install
@@ -247,15 +247,16 @@ let result = await nudb.search(query, timeout);
 
   - out: 輸出格式 (json or text)
 
-### Get record by rid
+### Get record by rid or key
 
 ```js
-let result = await nudb.rget(rid, timeout);
+let result = await nudb.rget(id, searchField, timeout);
 ```
 
 **參數說明**  
   
-- rid: Record ID.
+- id: Record ID 或 primary key
+- searchField: 搜尋的欄位，rid 或 key, 預設是 rid.
 - timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
 
 ### Put record
@@ -284,28 +285,30 @@ let result = await nudb.fput(file, format, recBeg, timeout);
 - recBeg: record begin pattern, 若資料格式為text則必須有此參數
 - timeout: 設定 timeout，單位為 ms，預設是 120000 ms.
 
-### Delete record by rid
+### Delete record by rid or key
 
 ```js
-let result = await nudb.rdel(rid, timeout);
+let result = await nudb.rdel(id, searchField, timeout);
 ```
 
 **參數說明**  
   
-- rid: 要刪除的資料rid, 可以一次刪除多筆 (使用 `,` 隔開多個rid)
+- id: Record ID 或 primary key, 一次刪除多筆可使用`,`區隔多個 id
+- searchField: 搜尋的欄位，rid 或 key, 預設是 rid.
 - timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
 
 ### Update record
 
 ```js
-let result = await nudb.rupdate(rid, data, format, updateMethod, timeout);
+let result = await nudb.rupdate(id, data, format, searchField, updateMethod, timeout);
 ```
 
 **參數說明**  
   
-- rid: 要更新的資料rid
+- id: 要更新的資料rid 或 primary key
 - data: 更新的資料內容
 - format: 資料格式(json or text)
+- searchField: 搜尋的欄位，rid 或 key, 預設是 rid.
 - updateMethod: 更新方式
   - replaceRecord: 取代整筆資料 (Default)
   - replaceField: 取代指定欄位的資料
