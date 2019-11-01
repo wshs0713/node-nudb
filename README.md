@@ -8,7 +8,7 @@ Menu:
 - [NUDB](#nudb)
   - [Install](#install)
   - [Usage](#usage)
-    - [資料格式說明](#%E8%B3%87%E6%96%99%E6%A0%BC%E5%BC%8F%E8%AA%AA%E6%98%8E)
+    - [資料格式說明](#%e8%b3%87%e6%96%99%e6%a0%bc%e5%bc%8f%e8%aa%aa%e6%98%8e)
     - [Connect to NUDB](#connect-to-nudb)
     - [Get DB info](#get-db-info)
     - [Search](#search)
@@ -64,7 +64,7 @@ let result = await nudb.getDBInfo(db, timeout);
 **參數說明**  
   
 - db: 指定 DB 名稱
-- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
+- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
   
 ### Search
 
@@ -95,7 +95,7 @@ let result = await nudb.search(query, timeout);
 
 **參數說明**  
   
-- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
+- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
 - query: query 參數
   - db: 指定DB
   - matchmode
@@ -258,7 +258,7 @@ let result = await nudb.rget(id, searchField, timeout);
   
 - id: Record ID 或 primary key
 - searchField: 搜尋的欄位，rid 或 key, 預設是 rid.
-- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
+- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
 
 ### Put record
 
@@ -271,7 +271,7 @@ let result = await nudb.rput(data, format, recBeg, timeout);
 - data: data object or string.
 - format: 資料格式(json or text)
 - recBeg: record begin pattern, 若資料格式為text則必須有此參數
-- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
+- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
 
 ### Put record from file
 
@@ -284,7 +284,7 @@ let result = await nudb.fput(file, format, recBeg, timeout);
 - file: 要上傳的檔案
 - format: 資料格式(json or text)
 - recBeg: record begin pattern, 若資料格式為text則必須有此參數
-- timeout: 設定 timeout，單位為 ms，預設是 120000 ms.
+- timeout: 設定 timeout，單位為 ms，預設是 110000 ms.
 
 ### Delete record by rid or key
 
@@ -296,7 +296,7 @@ let result = await nudb.rdel(id, searchField, timeout);
   
 - id: Record ID 或 primary key, 一次刪除多筆可使用`,`區隔多個 id
 - searchField: 搜尋的欄位，rid 或 key, 預設是 rid.
-- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
+- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
 
 ### Update record
 
@@ -313,6 +313,6 @@ let result = await nudb.rupdate(id, data, format, searchField, updateMethod, tim
 - updateMethod: 更新方式
   - replaceRecord: 取代整筆資料 (Default)
   - replaceField: 取代指定欄位的資料
-- timeout: 設定 timeout，單位為 ms，預設是 20000 ms.
+- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
 
 ## [Change log](/CHANGELOG.md)
