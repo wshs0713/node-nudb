@@ -1,5 +1,12 @@
 # Change log
 
+## v1.1.1
+
+Date: 2019-11-01
+
+- 更新 dependencies
+- 預設 timeout 調整為 10000 ms
+
 ## v1.1.0
 
 Date: 2019-05-17
