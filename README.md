@@ -284,7 +284,7 @@ let result = await nudb.fput(file, format, recBeg, timeout);
 - file: 要上傳的檔案
 - format: 資料格式(json or text)
 - recBeg: record begin pattern, 若資料格式為text則必須有此參數
-- timeout: 設定 timeout，單位為 ms，預設是 110000 ms.
+- timeout: 設定 timeout，單位為 ms，預設是 120000 ms.
 
 ### Delete record by rid or key
 
