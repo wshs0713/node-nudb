@@ -1,5 +1,12 @@
 # Change log
 
+## v1.1.4
+
+Date: 2019-11-15
+
+- 更新 ESlint
+- 修正 ESlint 錯誤
+
 ## v1.1.3
 
 Date: 2019-11-08
