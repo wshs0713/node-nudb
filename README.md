@@ -43,9 +43,9 @@ $ npm install node-nudb
 ### Connect to NUDB
 
 ```js
-const node_nudb = require('node-nudb');
+const { Nudb } = require('node-nudb');
 
-let nudb = new node_nudb.Nudb();
+const nudb = new Nudb();
 nudb.connect(host, port, db);
 ```
 
@@ -58,7 +58,7 @@ nudb.connect(host, port, db);
 ### Get DB info
 
 ```js
-let result = await nudb.getDBInfo(db, timeout);
+const result = await nudb.getDBInfo(db, timeout);
 ```
 
 **參數說明**  
@@ -69,7 +69,7 @@ let result = await nudb.getDBInfo(db, timeout);
 ### Search
 
 ```js
-let query = {
+const query = {
   db: "test",
   matchmode: "BestMatch",
   groupby: "@title:",
@@ -90,7 +90,7 @@ let query = {
   select: "@title:,@body:,@viewcount:",
   out: "json"
 }
-let result = await nudb.search(query, timeout);
+const result = await nudb.search(query, timeout);
 ```
 
 **參數說明**  
@@ -251,7 +251,7 @@ let result = await nudb.search(query, timeout);
 ### Get record by rid or key
 
 ```js
-let result = await nudb.rget(id, searchField, timeout);
+const result = await nudb.rget(id, searchField, timeout);
 ```
 
 **參數說明**  
@@ -263,7 +263,7 @@ let result = await nudb.rget(id, searchField, timeout);
 ### Put record
 
 ```js
-let result = await nudb.rput(data, format, recBeg, timeout);
+const result = await nudb.rput(data, format, recBeg, timeout);
 ```
 
 **參數說明**  
@@ -276,7 +276,7 @@ let result = await nudb.rput(data, format, recBeg, timeout);
 ### Put record from file
 
 ```js
-let result = await nudb.fput(file, format, recBeg, timeout);
+const result = await nudb.fput(file, format, recBeg, timeout);
 ```
 
 **參數說明**  
@@ -289,7 +289,7 @@ let result = await nudb.fput(file, format, recBeg, timeout);
 ### Delete record by rid or key
 
 ```js
-let result = await nudb.rdel(id, searchField, timeout);
+const result = await nudb.rdel(id, searchField, timeout);
 ```
 
 **參數說明**  
@@ -301,7 +301,7 @@ let result = await nudb.rdel(id, searchField, timeout);
 ### Update record
 
 ```js
-let result = await nudb.rupdate(id, data, format, searchField, updateMethod, timeout);
+const result = await nudb.rupdate(id, data, format, searchField, updateMethod, timeout);
 ```
 
 **參數說明**  
