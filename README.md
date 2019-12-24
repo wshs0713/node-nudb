@@ -53,18 +53,32 @@ nudb.connect(host, port, db);
   
 - host: DB host
 - port: DB port
-- db: 指定 DB 名稱
+- db: DB 名稱
   
 ### Get DB info
 
 ```js
-const result = await nudb.getDBInfo(db, timeout);
+// Example 1
+const options = {
+  out: 'json',
+  timeout: 10000
+};
+const result1 = await nudb.getDBInfo(db, options);
+
+// Example 2
+const result2 = await nudb.getDBInfo({
+  db,
+  out: 'json',
+  timeout: 10000
+});
 ```
 
 **參數說明**  
   
-- db: 指定 DB 名稱
-- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
+- db: DB 名稱
+- options
+  - out: 輸出格式(`json` or `text`)，預設是 json.
+  - timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
   
 ### Search
 
@@ -82,11 +96,17 @@ const query = {
   minscore: 100,
   maxscore: 5000,
   q: "旅遊",
-  time: "=20190101-20190310",
+  time: "20190101-20190310",
+  pat: "",
   filter: "@viewcount:>1000",
+  onlyfield: "@title:",
   Sensitivity: "sensitive",
+  keytermstat: 12,
   p: 1,
   ps: 10,
+  fastquery: "ON",
+  transform: "ON",
+  highlight: "title,body,description;<hl>,</hl>,512",
   select: "@title:,@body:,@viewcount:",
   out: "json"
 }
@@ -97,20 +117,20 @@ const result = await nudb.search(query, timeout);
   
 - timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
 - query: query 參數
-  - db: 指定DB
+  - db: DB 名稱
   - matchmode
     - AndMatch (預設)
     - OrMatch
     - BestMatch
-  - groupby: 指定欄位群組, 預設只有輸出key, count, 欄位格式為GAIS record
-  - getrec=y: 搭配groupby使用, 輸出全部資料
+  - groupby: 指定欄位群組，預設只有輸出 key & count, 欄位格式為 GAIS record
+  - getrec: 是否輸出全部資料(`y` or `n`)，搭配 `groupby` 使用
   - orderby
-    - rid: 依照rid排序
-    - score: 必須有參數q 才有score
-    - groupsize: 搭配groupby
-    - {FieldName}: 依照欄位(FieldName)排序
-      - 在建立DB時, 數值欄位須設定 `-numfieldindex`
-      - 在建立DB時, 時間欄位須設定 `-timeindex`
+    - rid: 依照 `rid` 排序
+    - score: 必須有參數 `q` 才有 score
+    - groupsize: 搭配 `groupby`
+    - `{FieldName}`: 依照指定欄位(FieldName)排序
+      - 在建立 DB 時, 數值欄位須設定 `-numfieldindex`
+      - 在建立 DB 時, 時間欄位須設定 `-timeindex`
 
       ```js
       {
@@ -126,14 +146,14 @@ const result = await nudb.search(query, timeout);
       }
       ```
 
-  - order: 搭配orderby使用, 預設為decreasing
+  - order: 搭配 `orderby` 使用, 預設為 decreasing
     - decreasing: 遞減
     - increasing: 遞增
-  - minrid: 設定rid最小值
-  - maxrid: 設定rid最大值
-  - ridrange: 設定搜尋的rid範圍, rid由大至小, 僅搜尋此範圍內的資料
-  - minscore: score最小值
-  - maxscore: score最大值
+  - minrid: 設定 rid 最小值
+  - maxrid: 設定 rid 最大值
+  - ridrange: 設定搜尋的 rid 範圍，rid 由大至小，僅搜尋此範圍內的資料
+  - minscore: score 最小值
+  - maxscore: score 最大值
   - q: 搜尋關鍵字
     - 全文搜尋:  
 
@@ -167,6 +187,14 @@ const result = await nudb.search(query, timeout);
       }
       ```
 
+    - 可過濾指定條件: (需有其他條件, 此功能才有作用)
+
+      ```js
+      {
+        q: 'apple,-@from_board:=test'
+      }
+      ```
+
     - 可搜尋多個欄位, 以","區隔:
 
       ```js
@@ -176,12 +204,20 @@ const result = await nudb.search(query, timeout);
       ```
 
   - time: 可設定搜尋時間範圍
-    - 在建立DB時, 時間欄位須設定 `-timeindex`
+    - 在建立 DB 時, 時間欄位須設定 `-timeindex`
+    - 支援多個時間欄位索引
+    - 可指定時間欄位查詢，若未指定欄位，預設使用第一個時間索引的欄位作為查詢
     - 限定時間區間
 
       ```js
       {
-        time: '=20180101-20180301'
+        time: '20180101-20180301'
+      }
+      ```
+
+      ```js
+      {
+        time: '@post_time:20180101-20180301'
       }
       ```
 
@@ -189,7 +225,7 @@ const result = await nudb.search(query, timeout);
   
       ```js
       {
-        time: '=>20180220122000'  // YYYYMMDDHHmmss
+        time: '>20180220122000'  // YYYYMMDDHHmmss
       }
       ```
 
@@ -197,7 +233,7 @@ const result = await nudb.search(query, timeout);
 
       ```js
       {
-        time: '=<20180220122000'  // YYYYMMDDHHmmss
+        time: '<20180220122000'  // YYYYMMDDHHmmss
       }
       ```
 
@@ -205,9 +241,26 @@ const result = await nudb.search(query, timeout);
 
       ```js
       {
-        time: '=20180220'
+        time: '20180220'
       }
       ```
+
+  - pat: 必須含有指定 pattern
+    - 搜尋結果中, 必須含有 "apple" pattern
+
+    ```js
+    {
+      pat: 'apple'
+    }
+    ```
+
+    - 指定欄位必須含有 pattern
+
+    ```js
+    {
+      pat: '@title:apple'
+    }
+    ```
 
   - filter: 數值條件檢索, 沒有做數值欄位索引(-numfieldindex)也可查詢
 
@@ -223,96 +276,195 @@ const result = await nudb.search(query, timeout);
       }
       ```
 
+  - onlyfield: 過濾欄位值有重複的資料
+    - Ex. 過濾重複 title 的資料
+
+      ```js
+      {
+        onlyfield: '@title:'
+      }
+      ```
+
   - maxcandidnum
   - Sensitivity
     - sensitive: 預設, 區分大小寫
     - insensitive: 不分大小寫
   - keytermfield
-  - keytermstat
-  - p: page, 指定輸出page, 預設為1
-  - ps: page size, 每個page大小, 預設為10
+  - keytermstat: 回傳指定數量的熱門 keyterm
+  - p: page, 指定輸出 page, 預設為 1
+  - ps: page size, 每個 page 大小, 預設為 10
+  - fastquery: 快速查詢(`ON` or `OFF`)
+  - transform: 展開分類詞(`ON` or `OFF`)
+  - highlight: highlight 關鍵字
+    - 可自訂 highlight 欄位、HTML 標籤、輸出長度...等
+    - 語法: `fields`;`prefix html tag`,`postfix html tag`,`output size`, `max segmentation number`
+    - 預設: `*;<B>,</B>,256,1`
+    - Example:
+
+      ```js
+      {
+        highlight: 'title,body;<hl>,</hl>,512'
+      }
+      ```
+
   - select: 指定輸出欄位, 欄位格式為GAIS record, 多個欄位之間以","區隔
-  - L: 指定回傳起始比數及總筆數
-
-    ```js
-    {
-      L: 30       // 回傳30筆
-    }
-    ```
-
-    ```js
-    {
-      L: '11,60'  // 從第11筆開始, 輸出60筆
-    }
-    ```
-
-  - out: 輸出格式 (json or text)
+  - out: 輸出格式(`json` or `text`)
 
 ### Get record by rid or key
 
 ```js
-const result = await nudb.rget(id, searchField, timeout);
+// Example 1
+const options = {
+  searchField: 'rid',
+  out: 'json',
+  timeout: 10000
+};
+const result1 = await nudb.rget(id, options);
+
+// Example 2
+const result2 = await nudb.rget({
+  id,
+  searchField: 'rid',
+  out: 'json',
+  timeout: 10000
+});
 ```
 
 **參數說明**  
   
-- id: Record ID 或 primary key
-- searchField: 搜尋的欄位，rid 或 key, 預設是 rid.
-- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
+- id: Record ID 或 primary key.
+- options
+  - searchField: 搜尋的欄位(`rid` or `key`)，預設是 rid.
+  - out: 輸出格式(`json` or `text`)，預設是 json.
+  - timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
 
 ### Put record
 
 ```js
-const result = await nudb.rput(data, format, recBeg, timeout);
+// Example 1
+const options = {
+  operation: 'rupdate',
+  recbeg: '@Gais_REC:',
+  out: 'json',
+  timeout: 10000
+};
+const result1 = await nudb.rput(data, format, options);
+
+// Example 2
+const result2 = await nudb.rput({
+  data,
+  format,
+  operation: 'rupdate',
+  recbeg: '@Gais_REC:',
+  out: 'json',
+  timeout: 10000
+});
+
 ```
 
 **參數說明**  
   
 - data: data object or string.
-- format: 資料格式(json or text)
-- recBeg: record begin pattern, 若資料格式為text則必須有此參數
-- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
+- format: 資料格式 (`json` or `text`)
+- options
+  - operation: 當資料存在時, 執行的動作 (`iupdate`, `rupdate` or `error`)
+  - recbeg: record begin pattern, 若資料格式為 text 則必須有此參數
+  - out: 輸出格式 (`json` or `text`)，預設是 json.
+  - timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
 
 ### Put record from file
 
 ```js
-const result = await nudb.fput(file, format, recBeg, timeout);
+// Example 1
+const options = {
+  recbeg: '@Gais_REC:',
+  out: 'json',
+  timeout: 120000
+};
+const result1 = await nudb.fput(file, format, options);
+
+// Example 2
+const result2 = await nudb.fput({
+  file,
+  format,
+  recbeg: '@Gais_REC:',
+  out: 'json',
+  timeout: 120000
+});
 ```
 
 **參數說明**  
   
 - file: 要上傳的檔案
-- format: 資料格式(json or text)
-- recBeg: record begin pattern, 若資料格式為text則必須有此參數
-- timeout: 設定 timeout，單位為 ms，預設是 120000 ms.
+- format: 資料格式(`json` or `text`)
+- options
+  - recbeg: record begin pattern, 若資料格式為 text 則必須有此參數
+  - out: 輸出格式 (`json` or `text`)，預設是 json.
+  - timeout: 設定 timeout，單位為 ms，預設是 120000 ms.
 
 ### Delete record by rid or key
 
 ```js
-const result = await nudb.rdel(id, searchField, timeout);
+// Example 1
+const options = {
+  searchField: 'rid',
+  out: 'json',
+  timeout: 10000
+};
+const result1 = await nudb.rdel(id, options);
+
+// Example 2
+const result2 = await nudb.rdel({
+  id,
+  searchField: 'rid',
+  out: 'json',
+  timeout: 10000
+});
 ```
 
 **參數說明**  
   
 - id: Record ID 或 primary key, 一次刪除多筆可使用`,`區隔多個 id
-- searchField: 搜尋的欄位，rid 或 key, 預設是 rid.
-- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
+- options
+  - searchField: 搜尋的欄位(`rid` or `key`)，預設是 rid.
+  - out: 輸出格式(`json` or `text`)，預設是 json.
+  - timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
 
 ### Update record
 
 ```js
-const result = await nudb.rupdate(id, data, format, searchField, updateMethod, timeout);
+// Example 1
+const options = {
+  searchField: 'rid',
+  updateMethod: 'replaceRecord',
+  out: 'json',
+  timeout: 10000
+};
+const result = await nudb.rupdate(id, data, format, options);
+
+// Example 2
+const result = await nudb.rupdate({
+  id,
+  data,
+  format,
+  searchField: 'rid',
+  updateMethod: 'replaceRecord',
+  out: 'json',
+  timeout: 10000
+});
 ```
 
 **參數說明**  
   
-- id: 要更新的資料rid 或 primary key
+- id: 要更新的資料 rid 或 primary key
 - data: 更新的資料內容
-- format: 資料格式(json or text)
-- searchField: 搜尋的欄位，rid 或 key, 預設是 rid.
-- updateMethod: 更新方式
-  - replaceRecord: 取代整筆資料 (Default)
-  - replaceField: 取代指定欄位的資料
-- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
+- format: 資料格式(`json` or `text`)
+- options
+  - searchField: 搜尋的欄位(`rid` or `key`)，預設是 rid.
+  - updateMethod: 更新方式(`replaceRecord` or `replaceField`)
+    - replaceRecord: 取代整筆資料 (Default)
+    - replaceField: 取代指定欄位的資料
+  - out: 輸出格式(`json` or `text`)，預設是 json.
+  - timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
 
 ## [Change log](/CHANGELOG.md)
