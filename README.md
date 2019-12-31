@@ -16,6 +16,7 @@ Menu:
     - [Put record](#put-record)
     - [Put record from file](#put-record-from-file)
     - [Delete record by rid or key](#delete-record-by-rid-or-key)
+    - [Delete by query](#delete-by-query)
     - [Update record](#update-record)
   - [Change log](#change-log)
 
@@ -429,6 +430,27 @@ const result2 = await nudb.rdel({
   - searchField: 搜尋的欄位(`rid` or `key`)，預設是 rid.
   - out: 輸出格式(`json` or `text`)，預設是 json.
   - timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
+
+### Delete by query
+
+刪除符合 query 條件的資料  
+
+```js
+const query = {
+  db: "test",
+  q: "test",
+  time: "20190101-20190331",
+  p: 1,
+  ps: 10,
+  out: "json"
+}
+const result = await nudb.deleteByQuery(query, timeout);
+```
+
+**參數說明**  
+  
+- query: 可參考 [Search](#search) 中的 `query` 參數說明
+- timeout: 設定 timeout，單位為 ms，預設是 10000 ms.
 
 ### Update record
 

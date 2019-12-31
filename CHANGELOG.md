@@ -1,5 +1,11 @@
 # Change log
 
+## v1.1.6
+
+Date: 2019-12-31
+
+- 新增功能: Delete by query
+
 ## v1.1.5
 
 Date: 2019-12-24
